@@ -1,5 +1,6 @@
 from celery import Celery
 from time import sleep
+import base64
 
 app = Celery(
     'models',
@@ -11,5 +12,8 @@ app = Celery(
 @app.task()
 def similarity(img1, img2):
     """Mock the similarity function between two images."""
+    img1 = base64.b64decode(img1)
+    img2 = base64.b64decode(img2)
+    print(f'Similarity recieved args of type: {type(img1)}, {type(img2)}')
     sleep(5)
     return 1.0

@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from celery import Celery
+import base64
 
 
 celery_app = Celery(
@@ -12,12 +13,24 @@ app = FastAPI()
 
 
 @app.post('/submit')
-def submit(img1: str, img2: str) -> int:
+def submit(img1: UploadFile = File(...), img2: UploadFile = File(...)) -> str:
     """
     Submit two images to be compared. The images are put into the message
     queue, and the id corresponding to the task is returned.
+
+    Note: One can only send JSON objects from Fastapi. So, the images are
+    encoded as base64 strings. On the Celery side, the images are decoded
+    back to bytes.
     """
-    return celery_app.send_task('models.similarity', kwargs={'img1': img1, 'img2': img2}).id
+    img1_contents = img1.file.read()
+    img2_contents = img2.file.read()
+    return celery_app.send_task(
+        "models.similarity",
+        kwargs={
+            "img1": base64.b64encode(img1_contents).decode("utf-8"),
+            "img2": base64.b64encode(img2_contents).decode("utf-8"),
+        },
+    ).id
 
 
 @app.get('/status/{task_id}')
