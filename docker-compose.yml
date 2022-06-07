@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  api:
+    build: './src/api'
+    environment:
+      - REDIS_URL=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+      - similarity
+
+  similarity:
+    build: './src/similarity'
+    user: nobody
+    depends_on:
+      - redis
+
+
+  redis:
+    image: 'redis:4-alpine'
+    ports:
+      - '6379:6379'
