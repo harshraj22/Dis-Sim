@@ -13,3 +13,8 @@
 
 ### Demo:
 ![myfile](./artifacts/streamlit-frontend-2022-06-08-16-06-21.gif)
+
+
+### Getting started:
+1. Run `docker-compose up --build` to create and start all the containers. (Use `-dt` to run in the background)
+2. Open the browser and navigate to `localhost:8501`
