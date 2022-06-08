@@ -23,7 +23,6 @@ def submit(img1: UploadFile = Form(), img2: UploadFile = Form()) -> str:
     back to bytes.
     """
     # shutil.copyfileobj(img1.file, open(img1.filename, 'wb'))
-    # print(f'written to {img1.filename}')
     img1_contents = img1.file.read()
     img2_contents = img2.file.read()
     return celery_app.send_task(
@@ -37,27 +36,12 @@ def submit(img1: UploadFile = Form(), img2: UploadFile = Form()) -> str:
 
 @app.get('/status/{task_id}')
 def status(task_id: str) -> str:
-    """
-    Check the status of a task.
-    """
+    """ Check the status of a task. """
     return str(celery_app.AsyncResult(task_id).state)
 
 
 @app.get('/result/{task_id}')
 def result(task_id: str) -> float:
-    """
-    Get the result of a task.
-    """
+    """ Get the result of a task. """
     return celery_app.AsyncResult(task_id).result
 
-""" 
-# https://stackoverflow.com/questions/7172784/how-do-i-post-json-data-with-curl
-curl -X POST \
-http://localhost:8001/submit \
--H 'Accept: application/json' \
--H 'Content-Type: application/json' \
--d '{
-"img1": "bar",
-"img2": "ipsum"
-}'
-"""

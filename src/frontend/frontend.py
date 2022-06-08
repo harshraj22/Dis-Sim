@@ -11,13 +11,11 @@ with st.form('Image Similarity'):
 
     img_form_submitted = st.form_submit_button("Submit")
 
-
 if img_form_submitted:
     url = "http://api:8001/submit"
     headers = {"accept": "application/json"}
     files = {"img1": img1, "img2": img2}
 
-    print(type(img1), 'is the type of image')
     response = requests.post(url, headers=headers, files=files)
 
     id = response.json()
