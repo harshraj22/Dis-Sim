@@ -16,8 +16,12 @@ services:
     user: nobody
     depends_on:
       - redis
-
-
+  frontend:
+    build: './src/frontend'
+    depends_on:
+      - api
+    ports:
+      - '8501:8501'
   redis:
     image: 'redis:4-alpine'
     ports:

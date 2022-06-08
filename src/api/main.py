@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, Form, UploadFile
 from celery import Celery
 import base64
 
@@ -13,7 +13,7 @@ app = FastAPI()
 
 
 @app.post('/submit')
-def submit(img1: UploadFile = File(...), img2: UploadFile = File(...)) -> str:
+def submit(img1: UploadFile = Form(), img2: UploadFile = Form()) -> str:
     """
     Submit two images to be compared. The images are put into the message
     queue, and the id corresponding to the task is returned.
@@ -22,6 +22,8 @@ def submit(img1: UploadFile = File(...), img2: UploadFile = File(...)) -> str:
     encoded as base64 strings. On the Celery side, the images are decoded
     back to bytes.
     """
+    # shutil.copyfileobj(img1.file, open(img1.filename, 'wb'))
+    # print(f'written to {img1.filename}')
     img1_contents = img1.file.read()
     img2_contents = img2.file.read()
     return celery_app.send_task(

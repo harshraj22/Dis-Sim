@@ -15,5 +15,5 @@ def similarity(img1, img2):
     img1 = base64.b64decode(img1)
     img2 = base64.b64decode(img2)
     print(f'Similarity recieved args of type: {type(img1)}, {type(img2)}')
-    sleep(5)
+    sleep(10)
     return 1.0
