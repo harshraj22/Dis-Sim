@@ -16,5 +16,9 @@
 
 
 ### Getting started:
-1. Run `docker-compose up --build` to create and start all the containers. (Use `-dt` to run in the background)
+1. Run `docker-compose up --build` to create and start all the containers. (Use `-d` to run in the background)
 2. Open the browser and navigate to `localhost:8501`
+
+
+### Benchmarks:
+- Load Testing: [here](./test/load_test)

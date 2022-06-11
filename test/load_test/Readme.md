@@ -1,5 +1,5 @@
 ## Running Load Test
-1. Spin up all the servers using `docker-compose`.
+1. Spin up all the servers using `docker-compose up --build`.
 2. Run load test using command line: `locust --headless --users 100 --spawn-rate 1 -H http://0.0.0.0:8001`. Note `8001` is the port for api end point specified in the corresponding docker file (`src/api/Dockerfile`)
 3. You can use the GUI version using `loctus`. Make sure you are in the directory `test/load_test/` as `locustfile.py` is present there.
 
