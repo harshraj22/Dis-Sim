@@ -1,14 +1,8 @@
-## Phase 1
+## Intro:
+Dis-Sim is a Microservices architecture based distributed image similarity measuring system. It uses asynchronous message queue to communicate across microservices. Its distributed architecture makes it highly scalable and fault tolerant.
 
-### What works ?
-- [x] `docker-compose` spins up all the services.
-- [x] The services have been tested manually using `localhost:<port>/docs`
-- [x] Celery and Redis work as expected.
+![architecture](https://user-images.githubusercontent.com/103534590/173185711-efad5bdf-4787-4ede-bb04-31be258517b0.png)
 
-### ToDo:
-- [x] Add a frontend (Streamlit preferably)
-- [x] Replace the similarity with actual deep learning model.
-- [ ] Make a cookiecutter template for the project.
 
 
 ### Demo:
@@ -16,9 +10,43 @@
 
 
 ### Getting started:
-1. Run `docker-compose up --build` to create and start all the containers. (Use `-d` to run in the background)
-2. Open the browser and navigate to `localhost:8501`
+1. Run `docker-compose up --build` to create and start all the containers. (Use `-d` flag to run the container in the background)
+2. Open the browser and navigate to `localhost:8501`. Note that `8501` is the port specified in the dockerfile of the `frontend` service (`src/frontend/Dockerfile`).
 
+
+### Using custom similarity measurer:
+Adding a custom similarity measurer is as simple as overwriding the `similarity` function in the `src/similarity/models` module.
+```python
+# import your new similarity measurer
+
+from my_similarity_measurer import MySimilarityMeasurer
+```
+
+```python
+# add your new similarity measurer in similarity method
+
+@app.task
+def similarity(img1, img2) -> float:
+    ...
+
+    score = MySimilarityMeasurer().similarity(img1, img2)
+    return score
+```
+
+Make sure to add the dependencies of your new similarity measurer in `src/similarity/requirements.txt`
 
 ### Benchmarks:
 - Load Testing: [here](./test/load_test)
+
+
+### References:
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Streamlit](https://streamlit.io/)
+- [Celery](https://celery.readthedocs.io/en/latest/)
+- [Redis](https://redis.io/)
+
+- [Microservices Architecture](https://en.wikipedia.org/wiki/Microservice)
+- [Message Queue](https://en.wikipedia.org/wiki/Message_queue)
+ 
