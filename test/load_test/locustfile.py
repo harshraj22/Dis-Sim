@@ -6,7 +6,10 @@ import requests
 with open('../../artifacts/960x0.jpg', 'rb') as f:
     img = f.read()
 
-headers = {'User-Agent': 'Mozilla/5.0'}
+print(r"""curl -X POST -H "Content-Type: application/json" -d '{"username": "test", "password": "test"}' http://0.0.0.0:8019/login""")
+auth_token = input('Enter auth token: ')
+
+headers = {'User-Agent': 'Mozilla/5.0',  'Authorization': f'Bearer {auth_token}'}
 paylod = {'img1': img, 'img2': img}
 
 def sync_health_check():
