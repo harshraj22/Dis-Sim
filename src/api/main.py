@@ -1,7 +1,12 @@
-from fastapi import FastAPI, Form, UploadFile
+from fastapi import Depends, FastAPI, Form, UploadFile
 from celery import Celery
 import base64
 
+import jwt
+from fastapi import HTTPException, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from passlib.context import CryptContext
+from datetime import datetime, timedelta
 
 celery_app = Celery(
     'api_celery',
@@ -11,9 +16,31 @@ celery_app = Celery(
 
 app = FastAPI()
 
+security = HTTPBearer()
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+secret = 'SECRET'
+
+def decode_token(token):
+    print(f'Token Recieved: {token}')
+    try:
+        payload = jwt.decode(token, secret, algorithms=['HS256'])
+        return payload['sub']
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail='Signature has expired')
+    except jwt.InvalidTokenError as e:
+        raise HTTPException(status_code=401, detail='Invalid token')
+
+def auth_wrapper(auth: HTTPAuthorizationCredentials = Security(security)):
+    return decode_token(auth.credentials)
+
+
+@app.post('/healthcheck')
+def healthcheck(user_id = Depends(auth_wrapper)):
+    return {'user_id': user_id}
+
 
 @app.post('/submit')
-async def submit(img1: UploadFile = UploadFile(filename='img1'), img2: UploadFile = UploadFile(filename='img2')) -> str:
+async def submit(img1: UploadFile = UploadFile(filename='img1'), img2: UploadFile = UploadFile(filename='img2'), user_id = Depends(auth_wrapper)) -> str:
     """
     Submit two images to be compared. The images are put into the message
     queue, and the id corresponding to the task is returned.

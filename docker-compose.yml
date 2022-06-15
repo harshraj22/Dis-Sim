@@ -22,6 +22,11 @@ services:
       - api
     ports:
       - '8501:8501'
+
+  auth:
+    build: './src/auth'
+    ports:
+      - '8009:8009'
   redis:
     image: 'redis:4-alpine'
     ports:
