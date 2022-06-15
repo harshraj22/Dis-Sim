@@ -1,0 +1,5 @@
+PyJWT
+passlib
+bcrypt
+fastapi
+uvicorn

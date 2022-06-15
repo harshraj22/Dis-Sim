@@ -28,3 +28,6 @@ vine==5.0.0
 wcwidth==0.2.5
 wrapt==1.14.1
 python-multipart==0.0.5
+PyJWT
+passlib
+bcrypt
