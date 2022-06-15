@@ -13,7 +13,7 @@ app = FastAPI()
 
 
 @app.post('/submit')
-def submit(img1: UploadFile = Form(), img2: UploadFile = Form()) -> str:
+async def submit(img1: UploadFile = UploadFile(filename='img1'), img2: UploadFile = UploadFile(filename='img2')) -> str:
     """
     Submit two images to be compared. The images are put into the message
     queue, and the id corresponding to the task is returned.
@@ -23,8 +23,8 @@ def submit(img1: UploadFile = Form(), img2: UploadFile = Form()) -> str:
     back to bytes.
     """
     # shutil.copyfileobj(img1.file, open(img1.filename, 'wb'))
-    img1_contents = img1.file.read()
-    img2_contents = img2.file.read()
+    img1_contents = await img1.read()
+    img2_contents = await img2.read()
     return celery_app.send_task(
         "models.similarity",
         kwargs={
