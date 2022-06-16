@@ -6,4 +6,5 @@ RUN pip install -r requirements.txt
 ADD . /app
 WORKDIR /app
 
-CMD ["python3", "main.py"]
+# https://stackoverflow.com/a/51362306/10127204
+CMD ["python3", "-u", "main.py"]

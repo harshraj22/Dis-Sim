@@ -53,6 +53,7 @@ services:
       - "29092:29092"
     depends_on:
       - zookeeper
+        # condition: service_completed_successfully
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -66,4 +67,5 @@ services:
     build: './src/monitor'
     depends_on:
       - broker
+        # condition: service_completed_successfully
     
