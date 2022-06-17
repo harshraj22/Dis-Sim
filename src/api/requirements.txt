@@ -31,3 +31,4 @@ python-multipart==0.0.5
 PyJWT
 passlib
 bcrypt
+kafka-python==2.0.2
