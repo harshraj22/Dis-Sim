@@ -38,6 +38,6 @@ def similarity(img1, img2) -> float:
     # Compute SSIM between two images
     score, diff = structural_similarity(first_gray, second_gray, full=True)
 
-    sleep(10)
+    # sleep(10)
     
     return round(score, 3)
