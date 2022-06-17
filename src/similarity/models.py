@@ -3,6 +3,7 @@ import base64
 from skimage.metrics import structural_similarity
 import cv2
 import numpy as np
+from time import sleep
 
 app = Celery(
     'models',
@@ -36,5 +37,7 @@ def similarity(img1, img2) -> float:
 
     # Compute SSIM between two images
     score, diff = structural_similarity(first_gray, second_gray, full=True)
+
+    sleep(10)
     
     return round(score, 3)

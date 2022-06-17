@@ -24,6 +24,8 @@ services:
       - api
     ports:
       - '8501:8501'
+    volumes:
+      - ./src/db:/app/db
 
   auth:
     build: './src/auth'

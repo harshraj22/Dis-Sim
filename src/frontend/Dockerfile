@@ -1,9 +1,12 @@
 FROM python:3.8
 
 WORKDIR /app
-COPY . .
-
-EXPOSE 8501
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-CMD ["streamlit", "run", "frontend.py"]
+COPY . .
+RUN mkdir -p db
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "main_page.py"]
