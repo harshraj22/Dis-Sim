@@ -50,3 +50,6 @@ Make sure to add the dependencies of your new similarity measurer in `src/simila
 - [Microservices Architecture](https://en.wikipedia.org/wiki/Microservice)
 - [Message Queue](https://en.wikipedia.org/wiki/Message_queue)
  
+
+### Further Reading:
+- [Naming Release Versions](https://py-pkgs.org/07-releasing-versioning.html#version-numbering)
