@@ -13,6 +13,8 @@ It has a built in data monitoring and analytics service which uses Kafka as a me
 ### Getting started:
 1. Run `docker-compose up --build` to create and start all the containers. (Use `-d` flag to run the container in the background)
 2. Open the browser and navigate to `localhost:8501`. Note that `8501` is the port specified in the dockerfile of the `frontend` service (`src/frontend/Dockerfile`).
+3. Use the existing credentials `username: test, password: test`. Would be soon adding frontend to register new user.
+
 
 <strong>Note:</strong> Since there are multiple services spinning up, it would take a little longer for all the services to start up before you can start playing with the similarity service. The images are large, and a good internet connection is required. You can expect the whole service to spin up within 5 minutes.
 
