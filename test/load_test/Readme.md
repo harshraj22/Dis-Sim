@@ -10,6 +10,7 @@ Note: It is advisable to run the heavy tests on isolated environments like githu
 
 ## Benchmarks:
 <img width="1257" alt="image" src="../../artifacts/locust.png">
+- Achieves a response rate of 350ms for 99.9% of the requests at an average of 46 requests per second.
          
 
 <br>          
