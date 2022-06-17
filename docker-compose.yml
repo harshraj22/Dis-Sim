@@ -67,5 +67,7 @@ services:
     build: './src/monitor'
     depends_on:
       - broker
+    volumes:
+      - ./src/db:/app/db
         # condition: service_completed_successfully
     

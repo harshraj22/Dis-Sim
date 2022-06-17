@@ -3,6 +3,7 @@ import json
 import os
 import base64
 import numpy as np
+from database import insert_data, DB_NAME, TABLE_NAME
 
 # ------------------------------
 os.environ['KAFKA_TOPIC'] = "DATA_MONITOR"
@@ -45,6 +46,14 @@ def main():
             img1_avg = np.mean(img1)
             img2_avg = np.mean(img2)
             print(f'Average Pixel Value of img1: {img1_avg}, Average Pixel Value of img2: {img2_avg}')
+
+            try:
+                insert_data(img1_avg)
+                insert_data(img2_avg)
+                print(f'Inserted img1 and img2 avg values into table')
+            except Exception as e:
+                print(f'Following error occured while inserting data: {e}')
+
 
 
 print(f'------------------Starting Monitoring----------------')
