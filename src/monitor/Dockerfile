@@ -9,6 +9,6 @@ WORKDIR /app
 RUN mkdir -p db
 # RUN python3 -u database.py
 
-CMD ["python3", "-u", "database.py"]
+# CMD ["python3", "-u", "database.py"] # Dockerfile can have only one CMD
 # https://stackoverflow.com/a/51362306/10127204
-CMD ["python3", "-u", "main.py"]
+CMD ["python3", "-u", "database.py", " && ", "python3", "-u", "main.py"]
