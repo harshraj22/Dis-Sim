@@ -51,6 +51,7 @@ Make sure to add the dependencies of your new similarity measurer in `src/simila
 - [Streamlit](https://streamlit.io/)
 - [Celery](https://celery.readthedocs.io/en/latest/)
 - [Redis](https://redis.io/)
+- [Kafka](https://medium.com/swlh/understanding-kafka-a-distributed-streaming-platform-9a0360b99de8)
 
 - [Microservices Architecture](https://en.wikipedia.org/wiki/Microservice)
 - [Message Queue](https://en.wikipedia.org/wiki/Message_queue)
