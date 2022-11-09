@@ -1,4 +1,4 @@
-name: ci
+name: Push Docker Images to Dockerhub Registery
 
 on:
   release:
