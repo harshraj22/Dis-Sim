@@ -2,6 +2,7 @@ version: "3.7"
 services:
   api:
     build: './src/api'
+    image: harshraj22/dis_sim_api
     environment:
       - REDIS_URL=redis
       - REDIS_PORT=6379
@@ -14,12 +15,14 @@ services:
 
   similarity:
     build: './src/similarity'
+    image: harshraj22/dis_sim_similarity
     user: nobody
     depends_on:
       - redis
 
   frontend:
     build: './src/frontend'
+    image: harshraj22/dis_sim_frontend
     depends_on:
       - api
     ports:
@@ -29,6 +32,7 @@ services:
 
   auth:
     build: './src/auth'
+    image: harshraj22/dis_sim_auth
     ports:
       - '8019:8019'
 
@@ -67,6 +71,7 @@ services:
 
   monitor:
     build: './src/monitor'
+    image: harshraj22/dis_sim_monitor
     depends_on:
       - broker
     volumes:

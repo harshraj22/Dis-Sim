@@ -1,0 +1,53 @@
+name: Push Docker Images to Dockerhub Registery
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build and push dis-sim-api
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/api/.
+          file: ./src/api/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_api:${{ github.event.release.tag_name }}
+      - name: Build and push dis-sim-auth
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/auth/.
+          file: ./src/auth/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_auth:${{ github.event.release.tag_name }}
+      - name: Build and push dis-sim-frontend
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/frontend/.
+          file: ./src/frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_frontend:${{ github.event.release.tag_name }}
+      - name: Build and push dis-sim-monitor
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/monitor/.
+          file: ./src/monitor/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_monitor:${{ github.event.release.tag_name }}
+      - name: Build and push dis-sim-similarity
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/similarity/.
+          file: ./src/similarity/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_similarity:${{ github.event.release.tag_name }}
+          

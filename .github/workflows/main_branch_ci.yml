@@ -1,0 +1,27 @@
+name: Check Docker Images are built without any errors
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build dis-sim-api
+        run:
+          docker build -f ./src/api/Dockerfile ./src/api
+      - name: Build dis-sim-auth
+        run:
+          docker build -f ./src/auth/Dockerfile ./src/auth
+      - name: Build dis-sim-frontend
+        run:
+          docker build -f ./src/frontend/Dockerfile ./src/frontend
+      - name: Build dis-sim-monitor
+        run:
+          docker build -f ./src/monitor/Dockerfile ./src/monitor
+      - name: Build dis-sim-similarity
+        run:
+          docker build -f ./src/similarity/Dockerfile ./src/similarity
