@@ -11,7 +11,7 @@ It has a built in data monitoring and analytics service which uses Kafka as a me
 
 
 ### Getting started:
-1. Run `docker-compose up ` to pull and start all the containers. <details> <summary> Build from source: </summary> `docker-compose up --build ` to build from the source, and not use the already built image from dockerhub. </details>
+1. Run `docker-compose pull && docker-compose up ` to pull and start all the containers. <details> <summary> Build from source: </summary> `docker-compose up --build ` to build from the source, and not use the already built image from dockerhub. </details>
 2. Open the browser and navigate to `localhost:8501`. Note that `8501` is the port specified in the dockerfile of the `frontend` service (`src/frontend/Dockerfile`).
 3. Use the existing credentials `username: test, password: test`. Would be soon adding frontend to register new user.
 
