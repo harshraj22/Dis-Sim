@@ -29,6 +29,7 @@ services:
       - '8501:8501'
     volumes:
       - ./src/db:/app/db
+      - ./src/frontend:/app
 
   auth:
     build: './src/auth'

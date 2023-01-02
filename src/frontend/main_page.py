@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-st.set_page_config(page_title="Frontend Service", page_icon="🤖")
+st.set_page_config(page_title="Frontend Service", page_icon="🤖", initial_sidebar_state="collapsed")
 st.title('Check Image Similarity')
 
 
