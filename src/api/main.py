@@ -9,6 +9,9 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 
+from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from kafka import KafkaProducer
 
 celery_app = Celery(
@@ -86,3 +89,16 @@ def result(task_id: str) -> float:
     """ Get the result of a task. """
     return celery_app.AsyncResult(task_id).result
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.on_event("startup")
+async def startup():
+    Instrumentator().instrument(app).expose(app)
