@@ -1,13 +1,14 @@
+
 ## Intro:
 Dis-Sim is a Microservices architecture based distributed image similarity measuring system. It uses asynchronous message queue to communicate across microservices. Its distributed architecture makes it highly scalable and fault tolerant.
 It has a built in data monitoring and analytics service which uses Kafka as a message broker, and sqlite3 as a database.
 
-![architecture](./artifacts/architecture.png)
+![architecture](https://user-images.githubusercontent.com/46635452/210266686-16c83011-6351-4877-b2dc-f2a93abb3fe6.png)
 
 
 
 ### Demo:
-![myfile](./artifacts/streamlit-frontend-2022-06-08-16-06-21.gif)
+![streamlit-frontend-2022-06-08-16-06-21](https://user-images.githubusercontent.com/46635452/210266742-a1f5cc31-977c-4e5c-8f8b-5ec2263d4c62.gif)
 
 
 ### Getting started:
