@@ -8,7 +8,8 @@ It has a built in data monitoring and analytics service which uses Kafka as a me
 
 
 ### Demo:
-![streamlit-frontend-2022-06-08-16-06-21](https://user-images.githubusercontent.com/46635452/210266742-a1f5cc31-977c-4e5c-8f8b-5ec2263d4c62.gif)
+![streamlit-frontend-2022-06-08-16-06-21](https://user-images.githubusercontent.com/46635452/210269580-5c7ea254-e427-4dc8-bf39-f80cafd65cc2.gif)
+
 
 
 ### Getting started:
