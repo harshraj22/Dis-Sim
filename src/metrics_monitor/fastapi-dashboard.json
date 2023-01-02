@@ -59,8 +59,7 @@
       "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
-          "displayName": "error"
+          "custom": {}
         },
         "overrides": []
       },
@@ -110,7 +109,7 @@
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ method }} {{ handler }}",
+          "legendFormat": "{{ handler }}",
           "refId": "A"
         }
       ],
@@ -218,7 +217,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "errors",
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -327,7 +326,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{ status }}",
-          "refId": "A"
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -428,7 +427,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "mem",
-          "refId": "A"
+          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -534,7 +533,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{ handler }}",
-          "refId": "A"
+          "refId": "E"
         }
       ],
       "thresholds": [],
@@ -641,7 +640,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{ handler }}",
-          "refId": "A"
+          "refId": "F"
         }
       ],
       "thresholds": [],
@@ -742,7 +741,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "cpu",
-          "refId": "A"
+          "refId": "G"
         }
       ],
       "thresholds": [],
@@ -850,7 +849,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{ handler }}",
-          "refId": "A"
+          "refId": "H"
         }
       ],
       "thresholds": [],
@@ -954,7 +953,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{ handler }}",
-          "refId": "A"
+          "refId": "I"
         }
       ],
       "thresholds": [
