@@ -24,6 +24,7 @@ jobs:
         with:
           context: ./src/api/.
           file: ./src/api/Dockerfile
+          platforms: linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_api:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_api:latest
       - name: Build and push dis-sim-auth
@@ -31,6 +32,7 @@ jobs:
         with:
           context: ./src/auth/.
           file: ./src/auth/Dockerfile
+          platforms: linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_auth:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_auth:latest
       - name: Build and push dis-sim-frontend
@@ -38,6 +40,7 @@ jobs:
         with:
           context: ./src/frontend/.
           file: ./src/frontend/Dockerfile
+          platforms: linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_frontend:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_frontend:latest
       - name: Build and push dis-sim-monitor
@@ -45,6 +48,7 @@ jobs:
         with:
           context: ./src/monitor/.
           file: ./src/monitor/Dockerfile
+          platforms: linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_monitor:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_monitor:latest
       - name: Build and push dis-sim-similarity
@@ -52,6 +56,7 @@ jobs:
         with:
           context: ./src/similarity/.
           file: ./src/similarity/Dockerfile
+          platforms: linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_similarity:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_similarity:latest
           
