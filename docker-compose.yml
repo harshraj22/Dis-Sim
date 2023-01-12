@@ -79,7 +79,27 @@ services:
       - ./src/db:/app/db
         # condition: service_completed_successfully
 
-
+  subscription_db:
+    container_name: subscription_db
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: DB
+      # MYSQL_USER: root
+    volumes:
+      - ./src/subscription_db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test:  "mysql $$MYSQL_DATABASE -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'" # ["mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-pmypassword"] #;
+      interval: 1s
+      timeout: 20s
+      retries: 10
+      start_period: 10s
 
   prometheus:
     image: prom/prometheus:latest
