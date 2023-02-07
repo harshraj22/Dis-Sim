@@ -41,6 +41,8 @@ services:
     image: 'redis:4-alpine'
     ports:
       - '6379:6379'
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
 
   # https://github.com/soumilshah1995/getting-started-with-kafka-and-elasticsearch/tree/main/Lab2 
   zookeeper:
@@ -51,6 +53,12 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    healthcheck: # https://gabrielschenker.com/index.php/2019/10/01/docker-compose-health-checks/
+      test: nc -z localhost 2181 || exit -1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   broker:
     image: confluentinc/cp-kafka:7.0.1
@@ -59,7 +67,8 @@ services:
       - "9092:9092"
       - "29092:29092"
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
         # condition: service_completed_successfully
     environment:
       KAFKA_BROKER_ID: 1
@@ -79,7 +88,27 @@ services:
       - ./src/db:/app/db
         # condition: service_completed_successfully
 
-
+  subscription_db:
+    container_name: subscription_db
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: DB
+      # MYSQL_USER: root
+    volumes:
+      - ./src/subscription_db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test:  "mysql $$MYSQL_DATABASE -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'" # https://github.com/docker/compose/issues/10155#event-8192088464
+      interval: 1s
+      timeout: 20s
+      retries: 10
+      start_period: 10s
 
   prometheus:
     image: prom/prometheus:latest
@@ -105,3 +134,16 @@ services:
     env_file:
       - ./src/metrics_monitor/config.monitoring
     
+
+  data_population:
+    build: './src/data_population'
+    # image: harshraj22/dis_sim_api
+    environment:
+      - REDIS_URL=redis
+      - REDIS_PORT=6379
+    depends_on:
+      redis:
+        condition: service_healthy
+      subscription_db:
+        condition: service_healthy
+      

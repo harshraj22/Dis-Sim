@@ -2,6 +2,7 @@ from fastapi import Depends, FastAPI, Form, UploadFile
 from celery import Celery
 import base64
 import json
+import logging
 
 import jwt
 from fastapi import HTTPException, Security
@@ -13,6 +14,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from kafka import KafkaProducer
+
+from subscription_rate_limiter.rate_limiter import is_allowed
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 celery_app = Celery(
     'api_celery',
@@ -33,7 +39,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 secret = 'SECRET'
 
 def decode_token(token):
-    print(f'Token Recieved: {token}')
+    logger.info(f'Token Recieved: {token}')
     try:
         payload = jwt.decode(token, secret, algorithms=['HS256'])
         return payload['sub']
@@ -46,9 +52,9 @@ def auth_wrapper(auth: HTTPAuthorizationCredentials = Security(security)):
     return decode_token(auth.credentials)
 
 
-@app.post('/healthcheck')
-def healthcheck(user_id = Depends(auth_wrapper)):
-    return {'user_id': user_id}
+@app.get('/healthcheck', status_code=200)
+def healthcheck():
+    return {'status': 'healthy'}
 
 
 @app.post('/submit')
@@ -61,6 +67,10 @@ async def submit(img1: UploadFile = UploadFile(filename='img1'), img2: UploadFil
     encoded as base64 strings. On the Celery side, the images are decoded
     back to bytes.
     """
+    logger.info(f'user_id {user_id} submitted a post request.')
+
+    if not is_allowed(user_id):
+        raise HTTPException(status_code=403, detail='Rate Limit Exceeded')
     # shutil.copyfileobj(img1.file, open(img1.filename, 'wb'))
     img1_contents = await img1.read()
     img2_contents = await img2.read()
@@ -69,7 +79,7 @@ async def submit(img1: UploadFile = UploadFile(filename='img1'), img2: UploadFil
             "img2": base64.b64encode(img2_contents).decode("utf-8"),
         }
 
-    print(f'Sending data to kafka: {data.keys()}')
+    logger.info(f'Sending data to kafka: {data.keys()}')
     producer.send(KAFKA_TOPIC, json.dumps(data).encode("utf-8"))
 
     return celery_app.send_task(
