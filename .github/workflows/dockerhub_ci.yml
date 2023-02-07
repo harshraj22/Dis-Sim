@@ -62,7 +62,7 @@ jobs:
       - name: Build and push dis-sim-data-population
         uses: docker/build-push-action@v3
         with:
-          context: ./src/similarity/.
+          context: ./src/data_population/.
           file: ./src/data_population/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true

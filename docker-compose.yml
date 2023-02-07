@@ -137,7 +137,7 @@ services:
 
   data_population:
     build: './src/data_population'
-    # image: harshraj22/dis_sim_api
+    image: harshraj22/dis_sim_data_population
     environment:
       - REDIS_URL=redis
       - REDIS_PORT=6379
