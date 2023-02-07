@@ -43,7 +43,7 @@ def add_request(username: str):
     """Adds current request to the cache"""
     cur_time = time.time()
     r.zadd(f'{REQUESTED_PREFIX}-{username}', {cur_time: cur_time})
-    logger.info(f'Added Request entry in Redis cache for user: {username} at {cur_time}')
+    print(f'Added Request entry in Redis cache for user: {username} at {cur_time}')
 
 
 def get_active_request_count(username: str):
@@ -58,7 +58,7 @@ def is_allowed(username: str):
     expire_old_requests(username)
     total_allowed_req = get_total_allwed_request(username)
     active_req = get_active_request_count(username)
-    logger.info(f'for user: {username}, total_allowed: {total_allowed_req}, active: {active_req}')
+    print(f'for user: {username}, total_allowed: {total_allowed_req}, active: {active_req}')
     if total_allowed_req >= active_req + 1:
         add_request(username)
         return True
