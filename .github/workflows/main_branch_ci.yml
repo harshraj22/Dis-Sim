@@ -25,3 +25,6 @@ jobs:
       - name: Build dis-sim-similarity
         run:
           docker build -f ./src/similarity/Dockerfile ./src/similarity
+      - name: Build dis-sim-data-population
+        run:
+          docker build -f ./src/data_population/Dockerfile ./src/data_population
