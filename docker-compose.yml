@@ -69,7 +69,12 @@ services:
     depends_on:
       zookeeper:
         condition: service_healthy
-        # condition: service_completed_successfully
+    healthcheck:
+      test: kafka-topics --bootstrap-server broker:9092 --list
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      # https://github.com/confluentinc/cp-docker-images/issues/248
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -145,5 +150,18 @@ services:
       redis:
         condition: service_healthy
       subscription_db:
+        condition: service_healthy
+
+  services_ready:
+    build: './src/services_ready'
+    # image: harshraj22/dis_sim_services_ready
+    depends_on:
+      redis:
+        condition: service_healthy
+      subscription_db:
+        condition: service_healthy
+      broker:
+        condition: service_healthy
+      zookeeper:
         condition: service_healthy
       
