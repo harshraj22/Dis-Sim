@@ -68,3 +68,12 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_data_population:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_data_population:latest
           
+      - name: Build and push services_ready
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/services_ready/.
+          file: ./src/services_ready/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_services_ready:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_services_ready:latest
+          

@@ -154,7 +154,7 @@ services:
 
   services_ready:
     build: './src/services_ready'
-    # image: harshraj22/dis_sim_services_ready
+    image: harshraj22/dis_sim_services_ready
     depends_on:
       redis:
         condition: service_healthy
