@@ -28,3 +28,6 @@ jobs:
       - name: Build dis-sim-data-population
         run:
           docker build -f ./src/data_population/Dockerfile ./src/data_population
+      - name: Build services-ready
+        run:
+          docker build -f ./src/services_ready/Dockerfile ./src/services_ready
