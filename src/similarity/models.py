@@ -4,6 +4,7 @@ from skimage.metrics import structural_similarity
 import cv2
 import numpy as np
 from time import sleep
+import os
 
 app = Celery(
     'models',
@@ -11,6 +12,36 @@ app = Celery(
     broker='redis://redis:6379/0'
 )
 
+redis_slave_urls = os.environ.get('REDIS_SLAVE_URLS', 'redis://localhost:6379/0').split(',')
+# REDIS_SLAVE_URLS=redis://slave1:6379,redis://slave2:6379,redis://slave3:6379
+
+result_backend_transport_options = {
+    'visibility_timeout': 3600,
+    'fanout_prefix': True,
+    'fanout_patterns': True,
+    'fanout_routing_key_prefix': True,
+    'fanout_deliver': True,
+    'fanout_cycle': True,
+    'fanout_queue_ttl': 300,
+    'fanout_add_new_consumers': True,
+    'fanout_wait_for_consumers': True,
+    'fanout_update_routing': True,
+    'fanout_delete_queues': True,
+    'fanout_ttl': 600,
+    'fanout_retry': True,
+    'fanout_transport_options': {
+        'master': 'redis://localhost:6379/0',
+        'slaves': redis_slave_urls
+    }
+}
+
+app.conf.update(
+    result_backend='redis',
+    result_backend_transport_options=result_backend_transport_options
+)
+
+# frequency with which Celery checks for changes in environment variables
+app.conf.beat_max_loop_interval = 60
 
 @app.task()
 def similarity(img1, img2) -> float:
