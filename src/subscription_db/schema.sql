@@ -5,12 +5,36 @@ USE `DB`;
 DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` (
   `Id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) NOT NULL,
-  `subscription_tier` varchar(10) NOT NULL,
-  `request_limit` int NOT NULL,
+  `subscription_tier` varchar(10) NOT NULL UNIQUE,
+  `request_limit` int NOT NULL, -- Number of allowed requests per minute
+  `retention_period` int NOT NULL, -- Number of days the result should be stored in the backend
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-alter table `subscription` add constraint ck_subscription_tier 
-   check (subscription_tier in ('Free', 'Basic', 'Advanced'));
-INSERT INTO `subscription` VALUES 
-(1, 'test', 'Free', 2), (2, 'premium', 'Advanced', 200);
+
+DROP TABLE IF EXISTS `auth`;
+CREATE TABLE auth (
+  `username` VARCHAR(20) PRIMARY KEY,
+  `password` VARCHAR(20) NOT NULL,
+  `subscription_tier` varchar(10) NOT NULL,
+  FOREIGN KEY (`subscription_tier`) REFERENCES `subscription`(`subscription_tier`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- alter table `subscription` add constraint ck_subscription_tier 
+--    check (subscription_tier in ('Free', 'Basic', 'Advanced'));
+-- INSERT INTO `subscription` VALUES 
+-- (1, 'test', 'Free', 2), (2, 'premium', 'Advanced', 200);
+INSERT INTO `subscription` (`subscription_tier`, `request_limit`, `retention_period`) 
+VALUES 
+    ('Free', 10, 1),
+    ('Basic', 100, 15),
+    ('Advanced', 1000, 60);
+
+INSERT INTO `auth` (`username`, `password`, `subscription_tier`) 
+VALUES 
+('free_user', 'free', 'Free'), 
+('basic_user', 'basic', 'Basic'), 
+('advanced_user', 'advanced', 'Advanced'), 
+('test', 'test', 'Advanced');
+
+
+CREATE VIEW `subscription_details` AS SELECT a.username, s.subscription_tier, s.request_limit, s.retention_period FROM auth a INNER JOIN subscription s ON a.subscription_tier = s.subscription_tier;

@@ -20,17 +20,17 @@ ALLOWED_PREFIX = 'allowed' # max number of requests allowed per WINDOW_LENGTH
 
 # preparing a cursor object
 cursor_object = database.cursor()
-user_record = """SELECT * FROM subscription """
+user_record = """SELECT * FROM subscription_details """
 records = cursor_object.execute(user_record)
 result = cursor_object.fetchall()
 
 # >>> print(result)
-# [(1, 'test', 'Free', 2), (2, 'premium', 'Advanced', 200)]
-  
-print(result) # ToDo: Change this to logger
+# [('free_user', 'Free', 10, 1), ('basic_user', 'Basic', 100, 15), ('advanced_user', 'Advanced', 1000, 60), ('test', 'Advanced', 1000, 60)]
+
+logger.debug(result)
 database.close()
 
-for id, username, subscription_tier, request_limit in result:
+for username, subscription_tier, request_limit, retention_period in result:
   r.set(f'{ALLOWED_PREFIX}-{username}', request_limit)
 
 r.close()
