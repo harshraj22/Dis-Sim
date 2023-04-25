@@ -18,7 +18,8 @@ services:
     image: harshraj22/dis_sim_similarity
     user: nobody
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
 
   frontend:
     build: './src/frontend'
@@ -36,6 +37,9 @@ services:
     image: harshraj22/dis_sim_auth
     ports:
       - '8019:8019'
+    depends_on:
+      data_population:
+         condition: service_healthy
 
   redis:
     image: 'redis:4-alpine'
@@ -146,6 +150,11 @@ services:
     environment:
       - REDIS_URL=redis
       - REDIS_PORT=6379
+    healthcheck:
+      test: ["CMD", "python3", "healthcheck.py"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     depends_on:
       redis:
         condition: service_healthy
