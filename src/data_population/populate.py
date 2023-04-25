@@ -4,6 +4,7 @@ import mysql.connector
 import logging
 from fastapi import FastAPI
 from pydantic import BaseModel
+import requests
 
 
 class Username(BaseModel):
@@ -56,3 +57,6 @@ def sync_all():
     r.set(f'{ALLOWED_PREFIX}-{username}', request_limit)
 
 # r.close()
+if __name__ == '__main__':
+  requests.get('http://data_population:8020/sync_all/')
+
