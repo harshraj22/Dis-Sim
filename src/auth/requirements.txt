@@ -1,5 +1,7 @@
 PyJWT
+mysql-connector-python==8.0.32
 passlib
 bcrypt
 fastapi
 uvicorn
+requests
