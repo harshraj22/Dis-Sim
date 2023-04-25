@@ -56,6 +56,10 @@ def sync_all():
   for username, subscription_tier, request_limit, retention_period in result:
     r.set(f'{ALLOWED_PREFIX}-{username}', request_limit)
 
+@app.get('/healthcheck', status_code=200)
+def healthcheck():
+  return 'OK'
+
 # r.close()
 if __name__ == '__main__':
   requests.get('http://data_population:8020/sync_all/')
