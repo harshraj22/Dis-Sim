@@ -150,6 +150,8 @@ services:
     environment:
       - REDIS_URL=redis
       - REDIS_PORT=6379
+    ports:
+      - "8020:8020"
     healthcheck:
       test: ["CMD", "python3", "healthcheck.py"]
       interval: 10s
