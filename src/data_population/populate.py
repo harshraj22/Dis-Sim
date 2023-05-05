@@ -32,9 +32,9 @@ cursor_object = database.cursor()
 
 @app.post('/sync', status_code=200)
 def sync(username: Username):
-  print(f'Syncing {username} to redis')
+  logger.info(f'Syncing {username} to redis')
   user_record = f"""SELECT * FROM subscription_details where username = '{username.username}'"""
-  print(user_record)
+  logger.info('User Record:', user_record)
   cursor_object.execute(user_record)
   result = cursor_object.fetchall()
 
@@ -42,6 +42,7 @@ def sync(username: Username):
     r.set(f'{ALLOWED_PREFIX}-{username}', request_limit) 
 
 
+@app.on_event("startup")
 @app.get('/sync_all', status_code=200)
 def sync_all():
   user_record = """SELECT * FROM subscription_details """
@@ -51,7 +52,7 @@ def sync_all():
   # >>> print(result)
   # [('free_user', 'Free', 10, 1), ('basic_user', 'Basic', 100, 15), ('advanced_user', 'Advanced', 1000, 60), ('test', 'Advanced', 1000, 60)]
 
-  logger.debug(result)
+  logger.info(result)
 
   for username, subscription_tier, request_limit, retention_period in result:
     r.set(f'{ALLOWED_PREFIX}-{username}', request_limit)
