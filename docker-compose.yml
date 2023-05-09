@@ -21,6 +21,20 @@ services:
       redis:
         condition: service_healthy
 
+  flower:
+    # https://distributedpython.com/posts/monitoring-a-dockerized-celery-cluster-with-flower/
+    image: mher/flower
+    container_name: flower
+    command: celery flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - FLOWER_PORT=8888
+    ports:
+      - 8888:8888
+    depends_on:
+      redis:
+        condition: service_healthy
+
   frontend:
     build: './src/frontend'
     image: harshraj22/dis_sim_frontend
