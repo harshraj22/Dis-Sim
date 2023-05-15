@@ -29,7 +29,8 @@ def register(auth_details: AuthDetails):
     cursor_object.execute(f"""INSERT INTO auth VALUES ('{auth_details.username}', '{hashed_password}', 'Free')""")
     
     database.commit()
-    requests.post(f'http://data_population:8020/sync/', json={'username': auth_details.username})
+    response = requests.post(f'http://data_population:8020/sync/', json={'username': auth_details.username})
+    print(f'Response from data_population for syncing data: {response.status_code}')
 
     logger.info(f"User {auth_details.username} registered successfully")
     return
