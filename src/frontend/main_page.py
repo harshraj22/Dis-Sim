@@ -10,20 +10,21 @@ if 'token' not in st.session_state:
 
 if st.session_state.token is None:
     # Registration form
-    with st.form('Register'):
-        username = st.text_input('Username')
-        password = st.text_input('Password', type='password')
-        confirm_password = st.text_input('Confirm Password', type='password')
-        register = st.form_submit_button('Register')
-        if register:
-            if password == confirm_password:
-                r = requests.post('http://auth:8019/register', json={'username': username, 'password': password})
-                if r.status_code == 201:
-                    st.success('Registration successful')
+    with st.expander('Register New User'):
+        with st.form('Register'):
+            username = st.text_input('Username')
+            password = st.text_input('Password', type='password')
+            confirm_password = st.text_input('Confirm Password', type='password')
+            register = st.form_submit_button('Register')
+            if register:
+                if password == confirm_password:
+                    r = requests.post('http://auth:8019/register', json={'username': username, 'password': password})
+                    if r.status_code == 201:
+                        st.success('Registration successful')
+                    else:
+                        st.error('Registration failed')
                 else:
-                    st.error('Registration failed')
-            else:
-                st.error('Passwords do not match')
+                    st.error('Passwords do not match')
 
     with st.form('Authenticate'):
         username = st.text_input('Username')
