@@ -8,8 +8,9 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 class TestImageSimilarityWorkflow(unittest.TestCase):
 
     def setUp(self):
+        r = requests.post('http://auth:8019/register', json={'username': 'free_user_007', 'password': 'free'})
         # Authenticate and store the auth token for later use
-        r = requests.post('http://auth:8019/login', json={'username': 'free_user', 'password': 'free'})
+        r = requests.post('http://auth:8019/login', json={'username': 'free_user_007', 'password': 'free'})
         self.assertEqual(r.status_code, 200)
         self.token = r.json()['token']
 
