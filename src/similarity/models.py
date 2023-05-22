@@ -12,7 +12,7 @@ app = Celery(
     broker='redis://redis:6379/0'
 )
 
-redis_slave_urls = os.environ.get('REDIS_SLAVE_URLS', 'redis://redis:6379/0').split(',')
+redis_slave_urls = os.environ.get('REDIS_SLAVE_URLS', 'redis://redis_slave:6379/0').split(',')
 # REDIS_SLAVE_URLS=redis://slave1:6379,redis://slave2:6379,redis://slave3:6379
 
 result_backend_transport_options = {
@@ -36,7 +36,7 @@ result_backend_transport_options = {
 }
 
 # app.conf.update(
-#     result_backend='redis',
+#     result_backend=','.join(redis_slave_urls),
 #     result_backend_transport_options=result_backend_transport_options
 # )
 

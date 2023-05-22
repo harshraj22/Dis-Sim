@@ -61,10 +61,17 @@ services:
       - '6379:6379'
     healthcheck:
       test: ["CMD", "redis-cli","ping"]
+    
+  # redis_slave:
+  #   image: 'redis:4-alpine'
+  #   ports:
+  #     - '6380:6379'
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli","ping"]
 
   # https://github.com/soumilshah1995/getting-started-with-kafka-and-elasticsearch/tree/main/Lab2 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.0.1
+    image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
     ports:
       - '2181:2181'
