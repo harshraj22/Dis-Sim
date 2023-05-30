@@ -47,7 +47,12 @@ def feedback(task_id: str, response: bool):
     cursor_object = database.cursor()
     # step 3: save the feedback to the database
     # For now, we are saving a part of image1 and image2 to the database. Later they can be saved to a file system and the path can be saved to the database.
-    query = f"""INSERT INTO feedback (task_id, response, img1, img2) VALUES ('{task_id}', {response}, '{similarity_images["img1"][:200]}', '{similarity_images["img2"][:200]}')"""
+    query = f"""
+        INSERT INTO feedback (task_id, response, img1, img2)
+        VALUES ('{task_id}', {response}, '{similarity_images["img1"][:200]}', '{similarity_images["img2"][:200]}')
+        ON DUPLICATE KEY UPDATE
+        response = {response}, img1 = '{similarity_images["img1"][:200]}', img2 = '{similarity_images["img2"][:200]}'
+    """
 
     cursor_object.execute(query)
     database.commit()
