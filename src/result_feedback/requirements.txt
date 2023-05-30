@@ -1,0 +1,7 @@
+celery==5.2.7
+fastapi
+uvicorn
+requests
+pydantic
+redis
+mysql-connector-python==8.0.32
