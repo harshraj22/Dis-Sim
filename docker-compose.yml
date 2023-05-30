@@ -55,6 +55,15 @@ services:
       data_population:
          condition: service_healthy
 
+  result_feedback:
+    build: './src/result_feedback'
+    image: harshraj22/dis_sim_result_feedback
+    ports:
+      - '8002:8002'
+    depends_on:
+      - similarity
+        #  condition: service_healthy
+
   redis:
     image: 'redis:4-alpine'
     ports:
@@ -133,6 +142,28 @@ services:
       # MYSQL_USER: root
     volumes:
       - ./src/subscription_db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test:  "mysql $$MYSQL_DATABASE -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'" # https://github.com/docker/compose/issues/10155#event-8192088464
+      interval: 1s
+      timeout: 20s
+      retries: 10
+      start_period: 10s
+
+  feedback_db:
+    container_name: feedback_db
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    ports:
+      - 3307:3306
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: DB
+      # MYSQL_USER: root
+    volumes:
+      - ./src/feedback_db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     healthcheck:
       test:  "mysql $$MYSQL_DATABASE -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'" # https://github.com/docker/compose/issues/10155#event-8192088464
       interval: 1s

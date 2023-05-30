@@ -95,3 +95,22 @@ if st.session_state.token is not None:
         response = requests.get(url)
         result = response.json()
         st.write(f'Similarity result: {result}')
+
+        # if response.status_code == 200:
+    with st.form('Feedback'):
+        task_id = st.text_input('Task Id')
+        feedback_response = st.checkbox('Is the result accurate?')
+        submit_feedback = st.form_submit_button('Submit Feedback')
+
+    if submit_feedback:
+        feedback_url = f"http://api:8001/feedback/"
+        feedback_response_data = {"task_id": task_id, "response": bool(feedback_response)}
+        feedback_headers = {"accept": "application/json", 'Authorization': f'Bearer {st.session_state.token}'}
+
+        feedback_response = requests.post(feedback_url, headers=feedback_headers, json=feedback_response_data)
+        print(f'Feedback response: {feedback_response}')
+
+        if feedback_response.status_code == 200:
+            st.success('Feedback submitted successfully')
+        else:
+            st.error('Failed to submit feedback')

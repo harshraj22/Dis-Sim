@@ -3,6 +3,8 @@ from celery import Celery
 import base64
 import json
 import logging
+import os
+from pydantic import BaseModel
 
 import jwt
 from fastapi import HTTPException, Security
@@ -18,13 +20,26 @@ from kafka import KafkaProducer
 from subscription_rate_limiter.rate_limiter import is_allowed
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
-celery_app = Celery(
+# redis_slave_urls = os.environ.get('REDIS_SLAVE_URLS', 'redis://redis_slave:6379/0').split(',')
+
+celery_similarity = Celery(
     'api_celery',
     backend='redis://redis:6379/0',
     broker='redis://redis:6379/0'
 )
+
+celery_feedback = Celery(
+    'feedback_celery',
+    backend='redis://redis:6379/1',
+    broker='redis://redis:6379/1'
+)
+
+# celery_app.conf.update(
+#     result_backend=','.join(redis_slave_urls),
+# )
+
 
 KAFKA_TOPIC = 'DATA_MONITOR'
 
@@ -37,6 +52,10 @@ producer = KafkaProducer(
 security = HTTPBearer()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 secret = 'SECRET'
+
+class Feedback(BaseModel):
+    task_id: str
+    response: bool
 
 def decode_token(token):
     logger.info(f'Token Recieved: {token}')
@@ -82,7 +101,7 @@ async def submit(img1: UploadFile = UploadFile(filename='img1'), img2: UploadFil
     logger.info(f'Sending data to kafka: {data.keys()}')
     producer.send(KAFKA_TOPIC, json.dumps(data).encode("utf-8"))
 
-    return celery_app.send_task(
+    return celery_similarity.send_task(
         "models.similarity",
         kwargs=data,
     ).id
@@ -91,14 +110,21 @@ async def submit(img1: UploadFile = UploadFile(filename='img1'), img2: UploadFil
 @app.get('/status/{task_id}')
 def status(task_id: str) -> str:
     """ Check the status of a task. """
-    return str(celery_app.AsyncResult(task_id).state)
+    return str(celery_similarity.AsyncResult(task_id).state)
 
 
 @app.get('/result/{task_id}')
 def result(task_id: str) -> float:
     """ Get the result of a task. """
-    return celery_app.AsyncResult(task_id).result
+    return celery_similarity.AsyncResult(task_id).result
 
+@app.post('/feedback')
+def feedback(feedback: Feedback, status_code=200):
+    logger.info(f'Submitting feedback for task: {feedback.task_id} as: {feedback.response}')
+    return celery_feedback.send_task(
+        "feedback.feedback",
+        kwargs={'task_id': feedback.task_id, 'response': feedback.response},
+    ).id
 
 app.add_middleware(
     CORSMiddleware,

@@ -36,3 +36,4 @@ kafka-python==2.0.2
 
 redis
 prometheus-fastapi-instrumentator
+pydantic
