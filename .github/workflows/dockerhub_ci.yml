@@ -77,3 +77,12 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_services_ready:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_services_ready:latest
           
+      - name: Build and push result_feedback
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/result_feedback/.
+          file: ./src/result_feedback/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_result_feedback:${{ github.event.release.tag_name }},${{ secrets.DOCKER_HUB_USERNAME }}/dis_sim_result_feedback:latest
+          
