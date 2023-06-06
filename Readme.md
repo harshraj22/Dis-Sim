@@ -49,6 +49,7 @@ Make sure to add the dependencies of your new similarity measurer in `src/simila
 
 
 ### References:
+- [The twelve factor app](https://youtu.be/1OhmRmMsGdQ)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [FastAPI](https://fastapi.tiangolo.com/)
